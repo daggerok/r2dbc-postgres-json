@@ -20,8 +20,10 @@ public class JsonObjectEventMappingConfig {
     return event -> {
       var type = Optional.ofNullable(event.getString("eventType", null))
                          .orElseThrow(RuntimeException::new);
-      if (VisitorRegisteredEvent.class.getSimpleName().equals(type)) return Mono.just(VisitorRegisteredEvent.from(event));
-      if (PassCardDeliveredEvent.class.getSimpleName().equals(type)) return Mono.just(PassCardDeliveredEvent.from(event));
+      if (VisitorRegisteredEvent.class.getSimpleName().equals(type))
+        return Mono.just(VisitorRegisteredEvent.from(event));
+      if (PassCardDeliveredEvent.class.getSimpleName().equals(type))
+        return Mono.just(PassCardDeliveredEvent.from(event));
       if (EnteredTheDoorEvent.class.getSimpleName().equals(type)) return Mono.just(EnteredTheDoorEvent.from(event));
       return Mono.empty();
     };
