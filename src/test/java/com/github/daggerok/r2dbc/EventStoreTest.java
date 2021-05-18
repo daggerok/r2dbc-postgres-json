@@ -1,7 +1,8 @@
 package com.github.daggerok.r2dbc;
 
-import com.github.daggerok.r2dbc.InternalAPI.PassCardDeliveredEvent;
-import com.github.daggerok.r2dbc.InternalAPI.VisitorRegisteredEvent;
+import com.github.daggerok.r2dbc.core.EventStore;
+import com.github.daggerok.r2dbc.customization.events.PassCardDeliveredEvent;
+import com.github.daggerok.r2dbc.customization.events.VisitorRegisteredEvent;
 import jakarta.json.Json;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.*;
