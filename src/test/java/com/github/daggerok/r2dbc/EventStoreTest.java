@@ -1,5 +1,8 @@
 package com.github.daggerok.r2dbc;
 
+import com.github.daggerok.r2dbc.InternalAPI.PassCardDeliveredEvent;
+import com.github.daggerok.r2dbc.InternalAPI.VisitorRegisteredEvent;
+import jakarta.json.Json;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +11,8 @@ import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.UUID;
-
-import static com.github.daggerok.r2dbc.API.PassCardDeliveredEvent;
-import static com.github.daggerok.r2dbc.API.VisitorRegisteredEvent;
 
 @Log4j2
 @SpringBootTest
@@ -30,10 +31,22 @@ class EventStoreTest {
   @Test
   void should_save_event() {
     // given
-    var aggregateId = UUID.randomUUID();
-    var expireAt = LocalDateTime.now().plus(1, ChronoUnit.DAYS);
+    var aggregateId = UUID.randomUUID().toString();
+    var expireAt = LocalDateTime.now()
+                                .plus(1, ChronoUnit.DAYS)
+                                .toString();
+    var jsonObject = Json.createObjectBuilder()
+                         .add("aggregateId", aggregateId)
+                         .add("expireAt", expireAt)
+                         .add("name", "A test")
+                         .build()
+                         .toString();
+    var eventObject = Json.createObjectBuilder(Map.of("aggregateId", aggregateId,
+                                                      "eventType", VisitorRegisteredEvent.class.getSimpleName(),
+                                                      "jsonData", jsonObject))
+                          .build();
     // then
-    StepVerifier.create(eventStore.save(VisitorRegisteredEvent.of(aggregateId, "A test", expireAt)))
+    StepVerifier.create(eventStore.save(VisitorRegisteredEvent.from(eventObject)))
                 .consumeNextWith(log::info)
                 .verifyComplete();
   }
@@ -41,7 +54,16 @@ class EventStoreTest {
   @Test
   void should_find_all() {
     // given
-    StepVerifier.create(eventStore.save(PassCardDeliveredEvent.of(UUID.randomUUID())))
+    var aggregateId = UUID.randomUUID().toString();
+    var jsonObject = Json.createObjectBuilder()
+                         .add("aggregateId", aggregateId)
+                         .build();
+    var eventObject = Json.createObjectBuilder(Map.of("aggregateId", aggregateId,
+                                                      "eventType", PassCardDeliveredEvent.class.getSimpleName(),
+                                                      "jsonData", jsonObject.toString()))
+                          .build();
+    // and
+    StepVerifier.create(eventStore.save(PassCardDeliveredEvent.from(eventObject)))
                 .consumeNextWith(log::info) // consume: one
                 .verifyComplete();
     // then
@@ -51,7 +73,7 @@ class EventStoreTest {
   }
 
   @Test
-  void should_find_by_aggregate_id() {
+  void should_not_find_by_unknown_aggregate_id() {
     StepVerifier.create(eventStore.findByAggregateIdOrderBySequenceNumberAsc(UUID.fromString("0-0-0-0-1")))
                 .verifyComplete(); // nothing to consume...
   }

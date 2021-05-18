@@ -1,5 +1,6 @@
 package com.github.daggerok.r2dbc;
 
+import jakarta.json.Json;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.DisplayName;
@@ -45,9 +46,23 @@ class EventStoreResourcesTests {
   void should_append_three_events_and_stream_them_back() {
     // given
     var aggregateId = UUID.randomUUID();
-    var jsonData1 = API.Event.jsonb.toJson(new API.JsonData(null, null, aggregateId, "VisitorRegisteredEvent", "A test visitor", null, null));
-    var jsonData2 = API.Event.jsonb.toJson(new API.JsonData(null, null, aggregateId, "PassCardDeliveredEvent", null, null, null));
-    var jsonData3 = API.Event.jsonb.toJson(new API.JsonData(null, null, aggregateId, "EnteredTheDoorEvent", null, null, "IN-1"));
+    var jsonData1 = Json.createObjectBuilder()
+                        .add("aggregateId", aggregateId.toString())
+                        .add("eventType", "VisitorRegisteredEvent")
+                        .add("name", "A test visitor")
+                        .build()
+                        .toString();
+    var jsonData2 = Json.createObjectBuilder()
+                        .add("aggregateId", aggregateId.toString())
+                        .add("eventType", "PassCardDeliveredEvent")
+                        .build()
+                        .toString();
+    var jsonData3 = Json.createObjectBuilder()
+                        .add("aggregateId", aggregateId.toString())
+                        .add("eventType", "EnteredTheDoorEvent")
+                        .add("doorId", "IN-1")
+                        .build()
+                        .toString();
     // when
     var appended1stEvent = client.post()
                                  .uri(ub -> ub.path("/append-event").build())
@@ -106,9 +121,23 @@ class EventStoreResourcesTests {
   void should_append_three_events_and_stream_them_back_using_aggregate_id() {
     // given
     var aggregateId = UUID.randomUUID();
-    var jsonData1 = API.Event.jsonb.toJson(new API.JsonData(null, null, aggregateId, "VisitorRegisteredEvent", "A test visitor", null, null));
-    var jsonData2 = API.Event.jsonb.toJson(new API.JsonData(null, null, aggregateId, "PassCardDeliveredEvent", null, null, null));
-    var jsonData3 = API.Event.jsonb.toJson(new API.JsonData(null, null, aggregateId, "EnteredTheDoorEvent", null, null, "IN-1"));
+    var jsonData1 = Json.createObjectBuilder()
+                        .add("aggregateId", aggregateId.toString())
+                        .add("eventType", "VisitorRegisteredEvent")
+                        .add("name", "A test visitor")
+                        .build()
+                        .toString();
+    var jsonData2 = Json.createObjectBuilder()
+                        .add("aggregateId", aggregateId.toString())
+                        .add("eventType", "PassCardDeliveredEvent")
+                        .build()
+                        .toString();
+    var jsonData3 = Json.createObjectBuilder()
+                        .add("aggregateId", aggregateId.toString())
+                        .add("eventType", "EnteredTheDoorEvent")
+                        .add("doorId", "IN-1")
+                        .build()
+                        .toString();
     // when
     var appended1stEvent = client.post()
                                  .uri(ub -> ub.path("/append-event").build())
