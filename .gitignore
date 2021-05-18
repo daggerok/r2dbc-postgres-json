@@ -1,0 +1,50 @@
+### IntelliJ IDEA ###
+.idea
+!.idea/
+.idea/*
+!.idea/codeStyle/
+!.idea/runConfigurations/
+*/.idea
+!*/.idea/
+*/.idea/*
+!*/.idea/runConfigurations/
+!*/.idea/codeStyle/
+*.iws
+*.iml
+*.ipr
+*.log*
+.gradle/
+target/
+build/
+/out/
+**/out/**
+
+### Node JS ###
+node_modules/
+.cache/
+dist/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+### VS Code ###
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
