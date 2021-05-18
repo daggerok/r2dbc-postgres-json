@@ -1,6 +1,8 @@
 # R2DBC EventStore [![CI](https://github.com/daggerok/r2dbc-postgres-json/actions/workflows/ci.yaml/badge.svg)](https://github.com/daggerok/r2dbc-postgres-json/actions/workflows/ci.yaml)
 
-Postgres JSON java application based on Spring Boot and Spring WebFlux with R2DBC, Postgres and nkonev r2dbc migration tool and Jakarta JSON-B Glassfish and yasson implementations
+Postgres JSON java application based on Spring Boot and Spring WebFlux
+with R2DBC, Postgres and nkonev r2dbc migration tool and Jakarta JSON-B
+Glassfish and yasson implementations
 
 ## Getting started
 
